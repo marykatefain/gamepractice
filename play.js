@@ -1,8 +1,8 @@
 function play(){
 
   // board states include: pregame, xturn, oturn, win, and tie
-  var board_state = 'pregame'
-  console.log(board_state);
+  var game_state = 'pregame'
+  console.log(game_state);
 
   var spaces = document.querySelectorAll('.space');
 
@@ -20,19 +20,19 @@ function play(){
 
   // updates to let players know who's turn it is
   function updateTurnOnBoard(){
-    if (board_state == 'pregame'){
+    if (game_state == 'pregame'){
       turn_message.innerHTML = "Click Start to play!";
     }
-    else if (board_state == 'xturn') {
+    else if (game_state == 'xturn') {
       turn_message.innerHTML = "X's turn!";
     }
-    else if (board_state == 'oturn') {
+    else if (game_state == 'oturn') {
       turn_message.innerHTML = "O's turn!";
     }
-    else if (board_state == 'win') {
+    else if (game_state == 'win') {
       turn_message.innerHTML = "Winner!";
     }
-    else if (board_state == 'tie') {
+    else if (game_state == 'tie') {
       turn_message.innerHTML = "Tie!";
     }
     else {
@@ -43,15 +43,15 @@ function play(){
 
   // updates player based on board state
   function updatePlayerFromBoardState(){
-    if (board_state == 'xturn' || 'oturn'){
+    if (game_state == 'xturn' || 'oturn'){
       is_turn = true;
       console.log("is_turn is " + is_turn);
-      if (board_state == 'xturn'){
+      if (game_state == 'xturn'){
         player = "X";
         console.log("player turn: " + player)
         return player, is_turn;
       }
-      else if (board_state == 'oturn'){
+      else if (game_state == 'oturn'){
         player = "O";
         console.log("player turn: " + player)
         return player, is_turn;
@@ -69,10 +69,10 @@ function play(){
   function switchTurn(){
     if (is_turn == true){
       if (player == "X"){
-        board_state = "oturn";
+        game_state = "oturn";
       }
       else if (player == "O"){
-        board_state = "xturn";
+        game_state = "xturn";
       }
       else{
         console.log("error! It's no one's turn to swtich from!")
@@ -80,15 +80,32 @@ function play(){
       updateTurnOnBoard();
       updatePlayerFromBoardState();
       listenForMove();
-      return board_state;
+      return game_state;
     }
     else{
       console.log("error! It's not a turn but I'm trying to switch!")
     }
   }
 
+function getBoardState(){
+  var board_state = [];
+  for (i = 0; i < spaces.length; i++){
+    board_state += spaces[i].innerHTML;
+  }
+  return board_state;
+}
+
 function checkWin(){
-  return;
+
+  board = getBoardState();
+  console.log(board);
+
+  if (board[0] == board[1] &&  board[0] == board[2]){
+    console.log("winner!");
+  }
+  else {
+    console.log("no winner yet");
+  }
 }
 
   function makeMove(e){
@@ -108,13 +125,13 @@ function checkWin(){
   }
 
   function startGame(){
-    if (board_state == 'pregame'){
-      board_state = 'xturn';
-      console.log(board_state);
+    if (game_state == 'pregame'){
+      game_state = 'xturn';
+      console.log(game_state);
       updateTurnOnBoard();
       updatePlayerFromBoardState();
       listenForMove();
-      return board_state;
+      return game_state;
     }
     else{
       return;
